@@ -9,22 +9,20 @@ import type GroupResponseItem from "@/modules/groups/infrastructure/GroupRespons
 
 const OverviewPage = () => {
     const authStore = useAuth();
-    const {init, getAll, groups} = useGroups();
+    const {init, getAll, groups, state} = useGroups();
     const [first, setFirst] = useState<GroupResponseItem | undefined>();
 
     useEffect(() => {
         if (authStore.state === 'authenticated') {
             init(authStore.code)
-                .then(() => getAll(authStore.code).finally(() => {
-                    console.info({
-                        message: 'assignning',
-                        groups
-                    });
-                    setFirst(groups[0] ?? undefined);
-                }))
+                .then(() => getAll(authStore.code).finally(() => setFirst(groups[0] ?? undefined)))
             ;
         }
     }, []);
+
+    if (state === 'loading' || !first){
+        return <span>Loading...</span>;
+    }
 
     return <main
         className="flex flex-wrap-reverse flex-col place-content-center bg-violet-100 rounded-md p-8 gap-8 max-w-fit">
