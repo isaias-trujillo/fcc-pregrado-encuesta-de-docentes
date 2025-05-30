@@ -1,6 +1,7 @@
 import useAuth from "@/modules/auth/infrastructure/stores/useAuth.ts";
 import {Navigate, Outlet} from "react-router";
 import {useEffect, useState} from "react";
+import {toast} from "sonner";
 
 const PrivateRoute = () => {
     const {init, state} = useAuth();
@@ -17,6 +18,7 @@ const PrivateRoute = () => {
     if (state === 'authenticated') {
         return <Outlet/>
     }
+    toast.error('No has iniciado sesión.')
     return <Navigate to="/" />
 }
 
