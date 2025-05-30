@@ -19,32 +19,44 @@ const useGroups = create<LiveGroupQuery>()(
             state: 'idle',
             groups: [],
             init: async (studentCode: string) => {
-                const [uuid] = await db.query<Uuid[]>(`live select out.* from enrolled_in where in = type::thing('student', $code)`, {
-                    code: studentCode
-                });
+                set({state: 'loading'});
+                try {
+                    const [uuid] = await db.query<Uuid[]>(`live select out.* from enrolled_in where in = type::thing('student', $code)`, {
+                        code: studentCode
+                    });
 
-                set({uuid});
+                    set({uuid});
 
-                await db.subscribeLive<GroupResponseItem>(
-                    uuid,
-                    (action, result) => {
-                        if (action === 'CLOSE') return;
+                    await db.subscribeLive<GroupResponseItem>(
+                        uuid,
+                        (action, result) => {
+                            if (action === 'CLOSE') return;
 
-                        const current = get().groups;
-                        if (action === 'CREATE') {
-                            set({groups: [...current, result]});
-                        } else if (action === 'DELETE') {
-                            set({groups: current.filter(g => g.course !== result.course && g.section !== result.section)});
+                            const current = get().groups;
+                            if (action === 'CREATE') {
+                                set({groups: [...current, result]});
+                            } else if (action === 'DELETE') {
+                                set({groups: current.filter(g => g.course !== result.course && g.section !== result.section)});
+                            }
                         }
-                    }
-                );
+                    ).finally(() => set({state: 'success'}));
+                }catch (error) {
+                    console.error(error);
+                    set({state: 'error', groups: []});
+                }
             },
             getAll: async (studentCode: string) => {
-                const query = `select value groups from only full_group where id = type::thing('full_group', $code);`;
-                const [result] = await db.query<GroupResponseItem[][]>(query, {
-                    code: studentCode
-                });
-                set({groups: result});
+                set({state: 'loading'});
+                try {
+                    const query = `select value groups from only full_group where id = type::thing('full_group', $code);`;
+                    const [result] = await db.query<GroupResponseItem[][]>(query, {
+                        code: studentCode
+                    });
+                    set({groups: result, state: 'success'});
+                }catch (error) {
+                    console.error(error);
+                    set({state: 'error', groups: []});
+                }
             }
         }),
         {
