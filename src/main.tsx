@@ -9,7 +9,7 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <BrowserRouter basename='/encuestas'>
             <App/>
-            <Toaster/>
+            <Toaster richColors={true} position={"bottom-center"}/>
         </BrowserRouter>
     </StrictMode>,
 )
