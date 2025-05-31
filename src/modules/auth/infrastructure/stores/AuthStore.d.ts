@@ -16,5 +16,6 @@ type AuthStore = Actions & ({
 } | {
     state: 'authenticated';
     token: string;
+    code: string;
 })
 export default AuthStore;

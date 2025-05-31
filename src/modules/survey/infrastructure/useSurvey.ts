@@ -4,11 +4,15 @@ import db from "@/modules/shared/infrastructure/surreal.db.ts";
 import type Progress from "@/modules/survey/domain/progress";
 import type Question from "@/modules/survey/domain/question";
 import type Alternative from "@/modules/survey/domain/alternative";
+import type GroupResponseItem from "@/modules/groups/infrastructure/GroupResponseItem";
 
 type Store = {
-    init(): Promise<void>;
+    init(payload: Partial<{
+        studentCode: string,
+        group: GroupResponseItem
+    }>): Promise<void>;
     progress: Progress;
-    check: (payload:{
+    check: (payload: {
         question: string;
         choice: string;
         studentCode: string;
@@ -23,15 +27,30 @@ const useSurvey = create(persist<Store>((set) => {
     return {
         progress: {
             questions: [],
-            alternatives: []
+            alternatives: [],
+            save: [],
         },
-        init: async () => {
+        init: async (payload) => {
             // noinspection SqlNoDataSourceInspection
-            const [questions, alternatives] = await db.query<[Question[], Alternative[]]>(`select *  from question; select * from alternative order by _order;`);
+            const [questions, alternatives, ...save] = await db.query<[Question[], Alternative[], any[]]>(
+                `select * from question;
+                        select * from alternative;
+                       select * from participates_in;`, {
+                    code: payload.studentCode,
+                    course: payload.group?.course?.code,
+                    section: payload.group?.section,
+                }).then(r => {
+                    console.log({
+                        message: 'result of many queries',
+                        result: r
+                    })
+                    return r
+            });
             set({
                 progress: {
-                    questions,
-                    alternatives
+                    questions: questions?? [],
+                    alternatives: alternatives??[],
+                    save,
                 } as Progress
             })
         },
@@ -49,7 +68,7 @@ const useSurvey = create(persist<Store>((set) => {
             };
             relate $student->answers->$question set id = $id, choice = $choice;
             `, {
-                code : payload.studentCode,
+                code: payload.studentCode,
                 course: payload.group.course,
                 section: payload.group.section,
                 question: payload.question,

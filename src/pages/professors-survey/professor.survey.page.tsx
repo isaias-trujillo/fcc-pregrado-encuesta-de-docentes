@@ -2,7 +2,7 @@ import {useParams} from "react-router";
 import useGroups from "@/modules/groups/infrastructure/useGroups.ts";
 import Navbar from "@/components/app/navbar.tsx";
 import useSurvey from "@/modules/survey/infrastructure/useSurvey.ts";
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import useAuth from "@/modules/auth/infrastructure/stores/useAuth.ts";
@@ -11,14 +11,16 @@ import {toast} from "sonner";
 const ProfessorSurveyPage = () => {
     const {course, section} = useParams();
     const {groups} = useGroups();
-    const group = groups.find(group => group.section === parseInt(section ?? "0") && group.course.code === course);
+    const group = useMemo(() => groups.find(group => group.section === parseInt(section ?? "0") && group.course.code === course), [course, groups, section]);
 
     const {init, progress, check} = useSurvey();
-    const {code} = useAuth();
+    const {code, state} = useAuth();
 
     useEffect(() => {
-        init();
-    }, [course, section, code]);
+        if (state === 'authenticated'){
+            init({studentCode: code, group});
+        }
+    }, []);
 
     return <main
         className="flex flex-wrap-reverse flex-col place-content-center rounded-md p-8 gap-8">
