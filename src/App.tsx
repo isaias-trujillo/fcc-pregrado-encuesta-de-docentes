@@ -1,20 +1,24 @@
-import './App.css'
-import {Route, Routes} from "react-router";
+import "./App.css";
+import { Route, Routes } from "react-router";
 import LoginPage from "@/pages/login.page.tsx";
-import PublicRoute from "@/handlers/public.route.tsx";
-import PrivateRoute from "@/handlers/private.route.tsx";
-import OverviewPage from "@/pages/overview.page.tsx";
-import ProfessorSurveyPage from "@/pages/professors-survey/professor.survey.page.tsx";
+import PublicRoute from "@/routing/public.route";
+import PrivateRoute from "@/routing/private.route";
+import DashboardPage from "@/pages/dashboard.page";
+import SurveyInstancePage from "@/pages/survey.page";
+import GroupProvider from "./modules/groups/infrastructure/ui/group.provider";
 
 function App() {
-
-    return <Routes>
-        <Route path="/" element={<PublicRoute><LoginPage/></PublicRoute>}/>
-        <Route element={<PrivateRoute/>}>
-            <Route path="/resumen" element={<OverviewPage/>}></Route>
-            <Route path="/cursos/:course/seccion/:section" element={<ProfessorSurveyPage/>}></Route>
-        </Route>
+  return (
+    <Routes>
+      <Route element={<PublicRoute />}>
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
+      <Route element={<PrivateRoute />}>
+        <Route path="/dashboard" element={<DashboardPage />}></Route>
+        <Route path="/" element={<SurveyInstancePage />}></Route>
+      </Route>
     </Routes>
+  );
 }
 
-export default App
+export default App;
