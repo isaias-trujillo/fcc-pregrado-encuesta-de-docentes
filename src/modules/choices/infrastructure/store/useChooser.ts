@@ -1,6 +1,7 @@
 import type Student from "@/modules/auth/domain/Student";
 import type State from "@/modules/choices/infrastructure/store/state";
 import { db } from "@/modules/shared/infrastructure/useSurreal";
+import { toast } from "sonner";
 import { RecordId, StringRecordId } from "surrealdb";
 import { create } from "zustand";
 
@@ -32,14 +33,22 @@ const useChooser = create<State>((setState) => {
             }),
           )
           .catch(() =>
-            db.query(
-              `update only asks set answer = $answerId where in = $in and out = $out`,
-              {
-                in: questionnaireId,
-                out: payload.questionId,
-                answerId: payload.answerId,
-              },
-            ),
+            db
+              .query(
+                `update only asks set answer = $answerId where in = $in and out = $out`,
+                {
+                  in: questionnaireId,
+                  out: payload.questionId,
+                  answerId: payload.answerId,
+                },
+              )
+              .catch(() => {
+                setState({
+                  tag: "error",
+                  message: "No se pudo guardar tu respuesta.",
+                });
+                toast.error("No se pudo guardar tu respuesta.");
+              }),
           );
       });
     },
