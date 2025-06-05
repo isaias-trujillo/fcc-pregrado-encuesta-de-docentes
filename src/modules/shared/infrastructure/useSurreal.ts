@@ -21,7 +21,7 @@ const useSurreal = create(
       status: () => db.status,
       reset: () => {
         set(initalState);
-        localStorage.removeItem("surrealdb-storage");
+        localStorage.clear();
       },
       connect: async () => {
         await db.connect(endpoint, {
