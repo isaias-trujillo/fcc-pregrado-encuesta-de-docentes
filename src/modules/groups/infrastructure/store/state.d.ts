@@ -14,7 +14,8 @@ type Actions = {
   value: () => Group | undefined;
   next: () => void;
   previous: () => void;
-  has: (position: "next" | "previous") => boolean;
+  goTo: (page: "first" | "previous" | number | "next" | "last") => void;
+  has: (position: "previous" | "next") => boolean;
 };
 
 type Tags =

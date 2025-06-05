@@ -23,6 +23,30 @@ const useGroups = create<State>()(
         if (!data.length) return undefined;
         return data[index];
       },
+      goTo: (page) => {
+        const { data, index } = get();
+        if (!data.length) return;
+        if (typeof page === "number") {
+          set({ index: Math.min(Math.max(0, page), get().data.length - 1) });
+          return;
+        }
+        switch (page) {
+          case "first":
+            set({ index: 0 });
+            break;
+          case "last":
+            set({ index: data.length - 1 });
+            break;
+          case "next":
+            set({ index: Math.min(index + 1, data.length - 1) });
+            break;
+          case "previous":
+            set({ index: Math.max(0, index - 1) });
+            break;
+          default:
+            break;
+        }
+      },
       previous: () => {
         const { index } = get();
         set({ index: Math.max(0, index - 1) });
