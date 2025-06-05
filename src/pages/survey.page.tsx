@@ -3,11 +3,16 @@ import useGroups from "@/modules/groups/infrastructure/store/useGroups";
 import QuestionProvider from "@/modules/questions/infrastructure/ui/question.provider";
 import QuestionContainer from "@/modules/questions/infrastructure/ui/question.container";
 import { Button } from "@/components/ui/button";
-import { LucideMoveLeft, LucideMoveRight } from "lucide-react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  LucideMoveLeft,
+  LucideMoveRight,
+} from "lucide-react";
 import { Link } from "react-router";
 
 const SurveyInstancePage = () => {
-  const { value, previous, next, has } = useGroups();
+  const { value, has, goTo } = useGroups();
   const group = value();
 
   return (
@@ -22,30 +27,46 @@ const SurveyInstancePage = () => {
       </QuestionProvider>
       <div className="flex flex-row gap-4 self-center">
         {has("previous") && (
-          <Button onClick={previous}>
+          <Button onClick={() => goTo("previous")}>
             <LucideMoveLeft />
             Anterior
           </Button>
         )}
         {!has("previous") && (
           <Link to="/dashboard">
-            <Button>
-              <LucideMoveLeft />
-              Dashboard
+            <Button
+              variant="link"
+              className="gap-1"
+              onClick={() => goTo("first")}
+            >
+              <ChevronLeftIcon
+                className="opacity-60"
+                size={16}
+                aria-hidden="true"
+              />
+              Regresar
             </Button>
           </Link>
         )}
         {has("next") && (
-          <Button onClick={next}>
+          <Button onClick={() => goTo("next")}>
             Siguiente
             <LucideMoveRight />
           </Button>
         )}
         {!has("next") && (
           <Link to="/dashboard">
-            <Button onClick={next}>
-              Finalizar
-              <LucideMoveRight />
+            <Button
+              variant="link"
+              className="gap-1"
+              onClick={() => goTo("first")}
+            >
+              <ChevronRightIcon
+                className="opacity-60"
+                size={16}
+                aria-hidden="true"
+              />
+              Enviar
             </Button>
           </Link>
         )}
