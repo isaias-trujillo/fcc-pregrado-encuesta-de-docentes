@@ -1,5 +1,6 @@
 import GroupProvider from "@/modules/groups/infrastructure/ui/group.provider";
 import useSurreal from "@/modules/shared/infrastructure/useSurreal";
+import SurveyProvider from "@/modules/survey/infrastructure/ui/survey.provider";
 import { Navigate, Outlet } from "react-router";
 
 const PrivateRoute = () => {
@@ -9,7 +10,9 @@ const PrivateRoute = () => {
   }
   return (
     <GroupProvider>
-      <Outlet />
+      <SurveyProvider>
+        <Outlet />
+      </SurveyProvider>
     </GroupProvider>
   );
 };

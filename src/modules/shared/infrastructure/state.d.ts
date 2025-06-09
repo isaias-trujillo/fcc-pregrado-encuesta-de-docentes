@@ -1,5 +1,5 @@
 import type Student from "@/modules/auth/domain/Student";
-import type { ConnectionStatus, StringRecordId } from "surrealdb";
+import type { ConnectionStatus } from "surrealdb";
 
 type Actions = {
   connect: () => Promise<void>;
@@ -11,7 +11,6 @@ type Props = {
   status: () => ConnectionStatus;
   token?: string;
   user?: Student["given_names"];
-  id?: StringRecordId;
   authenticated?: boolean;
 };
 

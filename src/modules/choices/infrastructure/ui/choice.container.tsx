@@ -4,6 +4,7 @@ import ChoiceItem from "@/modules/choices/infrastructure/ui/choice.item";
 import ChoiceSkeleton from "@/modules/choices/infrastructure/ui/choice.skeleton";
 import useGroups from "@/modules/groups/infrastructure/store/useGroups";
 import type Question from "@/modules/questions/domain/question";
+import useSurvey from "@/modules/survey/infrastructure/store/useSurvey";
 import { useCallback, type FC } from "react";
 import { StringRecordId } from "surrealdb";
 

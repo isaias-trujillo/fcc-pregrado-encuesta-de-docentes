@@ -33,7 +33,7 @@ const LoginForm = () => {
   const onSubmit = (payload: z.infer<typeof loginSchema>) => {
     toast.promise(() => login(payload), {
       success: "Bienvenido.",
-      error: (e) => `Revisa tus credenciales, message: ${e.message}`,
+      error: `Revisa tus credenciales.`,
     });
   };
 

@@ -13,7 +13,7 @@ const Navbar = () => {
       disconnect().finally(() => navigate("/")),
       {
         success: "Hasta pronto. 👋",
-        error: (e) => `Error al cerrar sesion: ${e.message}`,
+        error: `Error al cerrar sesion.`,
       },
     );
   };

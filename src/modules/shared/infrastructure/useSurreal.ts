@@ -1,4 +1,4 @@
-import Surreal, { StringRecordId } from "surrealdb";
+import Surreal from "surrealdb";
 import { create } from "zustand";
 import type State from "@/modules/shared/infrastructure/state";
 import type Student from "@/modules/auth/domain/Student";
@@ -12,7 +12,6 @@ const initalState: Partial<State> = {
   authenticated: false,
   token: undefined,
   user: undefined,
-  id: undefined,
 };
 
 const useSurreal = create(
@@ -51,7 +50,7 @@ const useSurreal = create(
         if (!info) {
           return;
         }
-        set({ token, user: info.given_names, id: new StringRecordId(info.id) });
+        set({ token, user: info.given_names });
       },
     }),
     {

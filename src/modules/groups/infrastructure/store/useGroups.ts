@@ -67,21 +67,17 @@ const useGroups = create<State>()(
       search: async () => {
         set({ tag: "loading" });
         const query =
-          "select value groups from only type::thing('full_group', $auth.id);";
+          "select value groups from only type::thing('full_group', record::id($auth));";
         return db
           .query<[Group[]]>(query)
-          .then(([result]) => {
-            console.log({ result });
-            if (!result.length) {
-              set({ tag: "not found" });
-              return;
+          .then(([data]) => {
+            console.log({ data });
+            if (!data.length) {
+              return Promise.reject(new Error("No se encontró ningún grupo."));
             }
-            set({ tag: "success", data: result });
+            set({ tag: "success", data });
           })
-          .catch((error) => {
-            set({ tag: "error", message: error.message });
-            console.error(error);
-          });
+          .catch((error) => set({ tag: "error", message: error.message }));
       },
     }),
     {

@@ -20,12 +20,7 @@ type Actions = {
 
 type Tags =
   | {
-      tag:
-        | "idle"
-        | "loading"
-        | "retrying"
-        | "not found"
-        | "max attempts reached";
+      tag: "idle" | "loading" | "retrying" | "max attempts reached";
     }
   | {
       tag: "success";

@@ -6,7 +6,7 @@ type Actions = {
     questionId: StringRecordId;
     answerId: StringRecordId;
     group: Group;
-  }) => void;
+  }) => Promise<void>;
   reset: () => Promise<void>;
 };
 

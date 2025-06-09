@@ -1,62 +1,61 @@
 import type Student from "@/modules/auth/domain/Student";
 import { db } from "@/modules/shared/infrastructure/useSurreal";
 import type State from "@/modules/survey/infrastructure/store/state";
-import { RecordId, StringRecordId, Uuid } from "surrealdb";
+import type { Data } from "@/modules/survey/infrastructure/store/state";
+import { RecordId, Uuid } from "surrealdb";
 import { create } from "zustand";
 
 const useSurvey = create<State>((set, get) => ({
+  status: "not started",
+  progress: {
+    completed: 0,
+    total: 0,
+    missing: 0,
+  },
+  search: async (payload) => {},
   listen: async (payload) => {
+    const { uuid } = get();
+    if (uuid) {
+      return await db.subscribeLive<Data>(uuid, (action, result) => {
+        // action can be: "CREATE", "UPDATE", "DELETE" or "CLOSE"
+        if (action === "CLOSE") return;
+        // result contains either the entire record, or a set of JSON patches when diff mode is enabled
+        set(result);
+      });
+    }
     return db.info<Student>().then(async (info) => {
-      if (!info) {
-        console.error("No student information found");
-        return;
-      }
+      if (!info) return;
       const { id: studentId } = info;
       const questionnaireId = new RecordId("questionnaire", {
-        group: new RecordId("group", {
-          course: new StringRecordId(payload.group.course.id),
-          section: payload.group.section,
-        }),
-        professor: new StringRecordId(payload.group.professor.id),
+        group: payload.group.id.toString(),
+        professor: payload.group.professor.id.toString(),
         student: studentId,
       });
-      return db
-        .select<{ status: State["status"] }>(questionnaireId)
-        .then(({ status }) => {
-          if (!status) {
-            console.error("No questionnaire found");
-            return;
-          }
-          set({ status: status });
-          if (!get().uuid) {
-            return db
-              .query<
-                [Uuid]
-              >(`live select value status from questionnaire where id = $id`, { id: questionnaireId })
-              .then(([uuid]) => {
-                set({ uuid });
-                return db.subscribeLive(uuid, (action, result) => {
-                  // action can be: "CREATE", "UPDATE", "DELETE" or "CLOSE"
-                  if (action === "CLOSE") return;
-                  // result contains either the entire record, or a set of JSON patches when diff mode is enabled
-                  const { status } = result as { status: State["status"] };
-                  set({ status });
-                });
+      console.log({ questionnaireId });
+      return db.select<Data>(questionnaireId).then((data) => {
+        if (!data) {
+          return Promise.reject(new Error("No se encontró la encuesta."));
+        }
+        set(data);
+        if (!get().uuid) {
+          return db
+            .query<[Uuid]>(
+              "live select value status, progress from questionnaire where id = $id",
+              {
+                id: questionnaireId.id,
+              },
+            )
+            .then(([uuid]) => {
+              set({ uuid });
+              return db.subscribeLive<Data>(uuid, (action, result) => {
+                // action can be: "CREATE", "UPDATE", "DELETE" or "CLOSE"
+                if (action === "CLOSE") return;
+                // result contains either the entire record, or a set of JSON patches when diff mode is enabled
+                set(result);
               });
-          }
-          const { uuid } = get();
-          if (!uuid) {
-            console.error("No uuid found");
-            return;
-          }
-          return db.subscribeLive(uuid, (action, result) => {
-            // action can be: "CREATE", "UPDATE", "DELETE" or "CLOSE"
-            if (action === "CLOSE") return;
-            // result contains either the entire record, or a set of JSON patches when diff mode is enabled
-            const { status } = result as { status: State["status"] };
-            set({ status });
-          });
-        });
+            });
+        }
+      });
     });
   },
 }));

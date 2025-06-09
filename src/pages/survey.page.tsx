@@ -10,10 +10,12 @@ import {
   LucideMoveRight,
 } from "lucide-react";
 import { Link } from "react-router";
+import useSurvey from "@/modules/survey/infrastructure/store/useSurvey";
 
 const SurveyInstancePage = () => {
   const { value, has, goTo } = useGroups();
   const group = value();
+  const { status, progress, uuid } = useSurvey();
 
   return (
     <main className="flex flex-wrap-reverse flex-col place-content-center p-8 gap-8 m-8 shadow-xl rounded-md">
@@ -23,6 +25,9 @@ const SurveyInstancePage = () => {
         <span>Curso: {group?.course.name}</span>
       </section>
       <QuestionProvider>
+        <span>Status: {status ?? "🍊 🍊 🍊"}</span>
+        <span>Progress: {JSON.stringify(progress) ?? "0%"}</span>
+        <span>UUID: {uuid?.toString()}</span>
         <QuestionContainer />
       </QuestionProvider>
       <div className="flex flex-row gap-4 self-center">
