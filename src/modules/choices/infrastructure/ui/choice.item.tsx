@@ -5,14 +5,15 @@ import { useId, type FC } from "react";
 
 type Props = {
   choice: Choice;
+  selected: boolean;
 };
 
-const ChoiceItem: FC<Props> = ({ choice }) => {
+const ChoiceItem: FC<Props> = ({ choice, selected }) => {
   const id = useId();
   return (
     <div
       key={`choice-item-${choice.id}`}
-      className="flex flex-row p-0 gap-5 m-5"
+      className={`flex flex-row p-0 gap-5 m-0 max-sm:w-full items-center ${selected ? "bg-violet-200" : ""}`}
     >
       <RadioGroupItem
         value={`${choice.id}`}

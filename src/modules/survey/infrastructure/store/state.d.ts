@@ -1,8 +1,6 @@
 import type Group from "@/modules/groups/domain/group";
-import type { Uuid } from "surrealdb";
 
 type Props = {
-  uuid?: Uuid; // query listenner id
   status: "completed" | "in progress" | "not started";
   progress: {
     completed: number;
@@ -12,8 +10,11 @@ type Props = {
 };
 
 type Actions = {
-  listen: (payload: { group: Group }) => Promise<void>;
-  search: (payload: { group: Group }) => Promise<void>;
+  listen: (payload: {
+    questionnaireId: RecordId;
+    callback: (data: Data) => void;
+  }) => Promise<void>;
+  search: (payload: { group: Group }) => Promise<RecordId>;
 };
 
 type State = Props & Actions;

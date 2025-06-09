@@ -4,7 +4,6 @@ import ChoiceItem from "@/modules/choices/infrastructure/ui/choice.item";
 import ChoiceSkeleton from "@/modules/choices/infrastructure/ui/choice.skeleton";
 import useGroups from "@/modules/groups/infrastructure/store/useGroups";
 import type Question from "@/modules/questions/domain/question";
-import useSurvey from "@/modules/survey/infrastructure/store/useSurvey";
 import { useCallback, type FC } from "react";
 import { StringRecordId } from "surrealdb";
 
@@ -24,7 +23,7 @@ const ChoiceContainer: FC<Props> = ({ question }) => {
         answerId: new StringRecordId(choice),
         questionId: question.id,
         group,
-      });
+      }).finally(() => {});
     },
     [question, group],
   );
@@ -34,11 +33,15 @@ const ChoiceContainer: FC<Props> = ({ question }) => {
   return (
     <RadioGroup
       defaultValue={question.answer?.toString()}
-      className="flex flex-row"
+      className="flex flex-row flex-wrap justify-between"
       onValueChange={onValueChange}
     >
       {question.choices.map((choice, index) => (
-        <ChoiceItem key={`choice-item-${choice.id}-${index}`} choice={choice} />
+        <ChoiceItem
+          key={`choice-item-${choice.id}-${index}`}
+          choice={choice}
+          selected={choice.id === question.answer}
+        />
       ))}
     </RadioGroup>
   );

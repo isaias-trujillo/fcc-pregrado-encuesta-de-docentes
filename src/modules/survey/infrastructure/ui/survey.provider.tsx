@@ -1,15 +1,17 @@
 import { useEffect, type ReactNode } from "react";
-import useSurvey from "../store/useSurvey";
+import useSurvey from "@/modules/survey/infrastructure/store/useSurvey";
 import useGroups from "@/modules/groups/infrastructure/store/useGroups";
 
 const SurveyProvider = ({ children }: { children: ReactNode }) => {
-  const { listen } = useSurvey();
+  const { search, listen } = useSurvey();
   const { value, index } = useGroups();
+  const group = value();
 
   useEffect(() => {
-    const group = value();
     if (!group) return;
-    listen({ group });
+    search({ group }).then((id) =>
+      listen({ questionnaireId: id, callback: () => search({ group }) }),
+    );
   }, [index]);
 
   return children;

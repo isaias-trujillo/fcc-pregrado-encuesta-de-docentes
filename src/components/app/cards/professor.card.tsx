@@ -25,7 +25,7 @@ const ProfessorCard = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <span>Progreso: 0 de {data.length} cursos</span>
+        <span>Cursos: {data.length}</span>
       </CardContent>
       <CardFooter className="flex-col gap-2 justify-end h-full">
         <Link to={`/docentes`} className="w-full">

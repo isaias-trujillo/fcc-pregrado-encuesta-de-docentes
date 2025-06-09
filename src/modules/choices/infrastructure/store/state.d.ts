@@ -6,7 +6,7 @@ type Actions = {
     questionId: StringRecordId;
     answerId: StringRecordId;
     group: Group;
-  }) => Promise<void>;
+  }) => Promise<void | { [x: string]: unknown }[]>;
   reset: () => Promise<void>;
 };
 

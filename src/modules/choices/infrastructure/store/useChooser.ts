@@ -32,24 +32,22 @@ const useChooser = create<State>((setState) => {
               answer: payload.answerId,
             }),
           )
-          .catch(() =>
-            db
-              .query(
-                `update only asks set answer = $answerId where in = $in and out = $out`,
-                {
-                  in: questionnaireId,
-                  out: payload.questionId,
-                  answerId: payload.answerId,
-                },
-              )
-              .catch(() => {
-                setState({
-                  tag: "error",
-                  message: "No se pudo guardar tu respuesta.",
-                });
-                toast.error("No se pudo guardar tu respuesta.");
-              }),
-          );
+          .catch(() => {
+            db.query(
+              `update only asks set answer = $answerId where in = $in and out = $out`,
+              {
+                in: questionnaireId,
+                out: payload.questionId,
+                answerId: payload.answerId,
+              },
+            ).catch(() => {
+              setState({
+                tag: "error",
+                message: "No se pudo guardar tu respuesta.",
+              });
+              toast.error("No se pudo guardar tu respuesta.");
+            });
+          });
       });
     },
     reset: async () => setState({ tag: "idle" }),
