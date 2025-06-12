@@ -9,7 +9,7 @@ import SurrealProvider from "@/modules/shared/infrastructure/surreal.provider";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <SurrealProvider>
-      <BrowserRouter basename="/encuesta">
+      <BrowserRouter basename="/encuesta-2025-1">
         <App />
         <Toaster richColors={true} />
       </BrowserRouter>
