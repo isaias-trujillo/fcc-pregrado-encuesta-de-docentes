@@ -1,10 +1,31 @@
+import "./loading.styles.css";
+
 const LoadingPage = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold">Cargando...</h1>
-      <p className="text-gray-500">
-        Por favor, espere mientras se carga la página.
-      </p>
+      <div className="capybaraloader">
+        <div className="capybara">
+          <div className="capyhead">
+            <div className="capyear">
+              <div className="capyear2"></div>
+            </div>
+            <div className="capyear"></div>
+            <div className="capymouth">
+              <div className="capylips"></div>
+              <div className="capylips"></div>
+            </div>
+            <div className="capyeye"></div>
+            <div className="capyeye"></div>
+          </div>
+          <div className="capyleg"></div>
+          <div className="capyleg2"></div>
+          <div className="capyleg2"></div>
+          <div className="capy"></div>
+        </div>
+        <div className="loader">
+          <div className="loaderline"></div>
+        </div>
+      </div>
     </div>
   );
 };

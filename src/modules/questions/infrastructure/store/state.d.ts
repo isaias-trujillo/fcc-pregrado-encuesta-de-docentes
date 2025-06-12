@@ -1,11 +1,12 @@
 import type Group from "@/modules/groups/domain/group";
-import type Question from "@/modules/survey/domain/question";
+import type Question from "@/modules/questions/domain/question";
 import type { StringRecordId } from "surrealdb";
 
 type Actions = {
   search: (payload: { group: Group }) => Promise<void>;
   retry: () => Promise<void>;
   reset: () => void;
+  save: (payload: { question: Question }) => Promise<void>;
 };
 
 type Props = {

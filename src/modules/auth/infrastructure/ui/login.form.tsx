@@ -39,7 +39,7 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
         <FormField
           control={form.control}
           name="email"
@@ -52,7 +52,7 @@ const LoginForm = () => {
               <FormControl>
                 <Input
                   placeholder="alex.martin@unmsm.edu.pe"
-                  className="px-4 py-3 rounded-md border border-[#d9d9d9] focus:ring-2 focus:ring-[#ebdaf1] focus:border-transparent text-[clamp(0.75rem,1.5vw,0.875rem)]"
+                  className="px-4 py-3 rounded-md border focus:border-transparent text-[clamp(0.85rem,1.5vw,1.15rem)]"
                   {...field}
                 />
               </FormControl>

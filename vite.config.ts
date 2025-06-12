@@ -7,4 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), tailwindcss()],
   base: "/encuesta",
+  build: {
+    outDir: "encuesta",
+  },
 });

@@ -5,6 +5,7 @@ import PublicRoute from "@/routing/public.route";
 import PrivateRoute from "@/routing/private.route";
 import DashboardPage from "@/pages/dashboard.page";
 import SurveyInstancePage from "@/pages/survey.page";
+import CompletedPage from "@/pages/completed.page";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<DashboardPage />}></Route>
         <Route path="/docentes" element={<SurveyInstancePage />}></Route>
+        <Route path="/completed" element={<CompletedPage />}></Route>
       </Route>
     </Routes>
   );

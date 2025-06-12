@@ -4,8 +4,8 @@ import LoginHeader from "@/modules/auth/infrastructure/ui/login.header.tsx";
 
 const LoginPage = () => {
   return (
-    <main className="flex flex-wrap-reverse flex-row place-content-center min-h-dvh p-2">
-      <section className="flex flex-col">
+    <main className="flex flex-wrap-reverse flex-row place-content-center min-h-dvh min-w-dvw p-2 bg-background text-foreground">
+      <section className="flex flex-col max-sm:w-5/6">
         <LoginHeader />
         <LoginForm />
       </section>

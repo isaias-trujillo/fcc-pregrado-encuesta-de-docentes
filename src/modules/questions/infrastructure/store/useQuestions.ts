@@ -8,10 +8,17 @@ import type Student from "@/modules/auth/domain/Student";
 
 const useQuestions = create(
   persist<State>(
-    (setState) => ({
+    (setState, get) => ({
       tag: "idle",
       attempts: 0,
       data: [],
+      save: async ({ question }) => {
+        const { data } = get();
+        const original = data.find((q) => q.id === question.id);
+        if (!original) return;
+        original.answer = question.answer;
+        setState({ data });
+      },
       retry: async () => {},
       reset: () => setState({ tag: "idle", attempts: 0, data: [] }),
       search: async (payload) => {
@@ -52,7 +59,7 @@ const useQuestions = create(
       },
     }),
     {
-      name: "questions",
+      name: "survey.questionnaire",
     },
   ),
 );

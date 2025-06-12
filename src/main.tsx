@@ -11,7 +11,7 @@ createRoot(document.getElementById("root")!).render(
     <SurrealProvider>
       <BrowserRouter basename="/encuesta">
         <App />
-        <Toaster richColors={true} position={"bottom-center"} />
+        <Toaster richColors={true} />
       </BrowserRouter>
     </SurrealProvider>
   </StrictMode>,

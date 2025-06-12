@@ -19,9 +19,9 @@ const SurveyInstancePage = () => {
   const { status } = useSurvey();
 
   return (
-    <main className="flex flex-wrap-reverse flex-col place-content-center p-8 gap-8 m-8 shadow-xl rounded-md">
+    <main className="flex flex-wrap-reverse flex-col place-content-center px-8 py-16 gap-8 bg-background text-foreground">
       <Navbar />
-      <section className="flex flex-col px-6 py-4 gap-4 font-semibold bg-accent rounded-md text-[clamp(0.75rem,1rem+5vw,1.05rem)] transition-colors">
+      <section className="flex flex-col px-6 py-4 gap-4 font-semibold bg-stone-700 text-background dark:bg-stone-300 rounded-md text-[clamp(0.75rem,1rem+5vw,1.05rem)] transition-colors">
         <span>Docente: {group?.professor?.full_name}</span>
         <span>Curso: {group?.course.name}</span>
       </section>
@@ -38,15 +38,11 @@ const SurveyInstancePage = () => {
         {!has("previous") && (
           <Link to="/dashboard">
             <Button
-              variant="link"
+              variant="outline"
               className="gap-1"
               onClick={() => goTo("first")}
             >
-              <ChevronLeftIcon
-                className="opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
+              <ChevronLeftIcon />
               Regresar
             </Button>
           </Link>
@@ -66,9 +62,9 @@ const SurveyInstancePage = () => {
           </Button>
         )}
         {!has("next") && (
-          <Link to="/dashboard">
+          <Link to="/completed">
             <Button
-              variant="link"
+              variant="outline"
               className="gap-1"
               onClick={() => {
                 if (status === "completed") {
@@ -78,11 +74,7 @@ const SurveyInstancePage = () => {
                 toast.error("Aún tienes preguntas sin responder.");
               }}
             >
-              <ChevronRightIcon
-                className="opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
+              <ChevronRightIcon />
               Enviar
             </Button>
           </Link>

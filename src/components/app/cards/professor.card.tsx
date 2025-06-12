@@ -15,22 +15,24 @@ const ProfessorCard = () => {
   const { data } = useGroups();
 
   return (
-    <Card className="w-[clamp(min(30rem,100%),40rem+5dvw,45rem+5dvw)]">
+    <Card className="w-md max-sm:w-[calc(100dvw-4rem)] font-semibold">
       <CardHeader>
-        <CardTitle className="text-[clamp(2rem,2rem+5dvw,2rem+2dvw)]">
-          Docentes
-        </CardTitle>
+        <CardTitle className="text-[clamp(2rem,2rem+5dvw,2rem+2dvw)]"></CardTitle>
         <CardDescription>
-          <span>10 preguntas por curso</span>
+          <span className="text-[clamp(1rem,1rem+5dvw,1rem+2dvw)]">
+            10 preguntas por curso
+          </span>
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <span>Cursos: {data.length}</span>
+        <span className="text-[clamp(0.75rem,0.75rem+0.75dvw,0.75rem+1dvw)]">
+          Cursos: {data.length}
+        </span>
       </CardContent>
       <CardFooter className="flex-col gap-2 justify-end h-full">
         <Link to={`/docentes`} className="w-full">
           <Button className="w-full">
-            Continuar
+            Empezar
             <ArrowRight />
           </Button>
         </Link>

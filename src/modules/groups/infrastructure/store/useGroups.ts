@@ -71,7 +71,6 @@ const useGroups = create<State>()(
         return db
           .query<[Group[]]>(query)
           .then(([data]) => {
-            console.log({ data });
             if (!data.length) {
               return Promise.reject(new Error("No se encontró ningún grupo."));
             }
