@@ -9,7 +9,7 @@ import {
   LucideMoveLeft,
   LucideMoveRight,
 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useSurvey from "@/modules/survey/infrastructure/store/useSurvey";
 import { toast } from "sonner";
 
@@ -17,6 +17,7 @@ const SurveyInstancePage = () => {
   const { value, has, goTo } = useGroups();
   const group = value();
   const { status } = useSurvey();
+  const navigate = useNavigate();
 
   return (
     <main className="flex flex-wrap-reverse flex-col place-content-center px-8 py-16 gap-8 bg-background text-foreground">
@@ -62,22 +63,20 @@ const SurveyInstancePage = () => {
           </Button>
         )}
         {!has("next") && (
-          <Link to="/completed">
-            <Button
-              variant="outline"
-              className="gap-1"
-              onClick={() => {
-                if (status === "completed") {
-                  goTo("first");
-                  return;
-                }
-                toast.error("Aún tienes preguntas sin responder.");
-              }}
-            >
-              <ChevronRightIcon />
-              Enviar
-            </Button>
-          </Link>
+          <Button
+            variant="outline"
+            className="gap-1"
+            onClick={() => {
+              if (status === "completed") {
+                navigate("/completed");
+                return;
+              }
+              toast.error("Aún tienes preguntas sin responder.");
+            }}
+          >
+            <ChevronRightIcon />
+            Enviar
+          </Button>
         )}
       </div>
     </main>

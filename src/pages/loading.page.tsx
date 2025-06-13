@@ -2,7 +2,7 @@ import "./loading.styles.css";
 
 const LoadingPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center h-screen bg-background">
       <div className="capybaraloader">
         <div className="capybara">
           <div className="capyhead">
