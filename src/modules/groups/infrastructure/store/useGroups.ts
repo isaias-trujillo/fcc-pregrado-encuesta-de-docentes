@@ -67,7 +67,7 @@ const useGroups = create<State>()(
       search: async () => {
         set({ tag: "loading" });
         const query =
-          "select value groups from only type::thing('full_group', record::id($auth));";
+          "select value groups.filter(|$i| $i.professor) from only type::thing('full_group', record::id($auth));";
         return db
           .query<[Group[]]>(query)
           .then(([data]) => {

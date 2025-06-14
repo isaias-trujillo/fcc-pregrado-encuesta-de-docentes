@@ -9,10 +9,19 @@ import {
 } from "@/components/ui/card";
 import useGroups from "@/modules/groups/infrastructure/store/useGroups";
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const ProfessorCard = () => {
   const { data } = useGroups();
+  const navigate = useNavigate();
+
+  const onContinue = () => {
+    if (data.length > 0) {
+      return navigate("/docentes");
+    }
+    toast.error("No se pudo encotrar algún docente asignado a tus cursos.");
+  };
 
   return (
     <Card className="w-md max-sm:w-[calc(100dvw-4rem)] font-semibold">
@@ -30,12 +39,14 @@ const ProfessorCard = () => {
         </span>
       </CardContent>
       <CardFooter className="flex-col gap-2 justify-end h-full">
-        <Link to={`/docentes`} className="w-full">
-          <Button className="w-full">
-            Empezar
-            <ArrowRight />
-          </Button>
-        </Link>
+        <Button
+          className="w-full"
+          onClick={onContinue}
+          disabled={data.length === 0}
+        >
+          Empezar
+          <ArrowRight />
+        </Button>
       </CardFooter>
     </Card>
   );
