@@ -11,7 +11,7 @@ const LoginPage = () => {
       </section>
       <aside className="w-[clamp(min(20rem,100%),25rem+5dvw,calc(4/10*100%))] flex flex-wrap flex-col place-content-center place-items-center">
         <img src={aside} alt="A woman" />
-        <span>Image by storyset on Freepik</span>
+        <span>version 1.0.4</span>
       </aside>
     </main>
   );
