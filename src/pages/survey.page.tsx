@@ -16,12 +16,13 @@ import { toast } from "sonner";
 const SurveyInstancePage = () => {
   const { value, has, goTo } = useGroups();
   const group = value();
-  const { status } = useSurvey();
+  const { status,progress } = useSurvey();
   const navigate = useNavigate();
 
   return (
     <main className="flex flex-wrap-reverse flex-col place-content-center px-8 py-16 gap-8 bg-background text-foreground">
       <Navbar />
+        <span>Progress: {JSON.stringify(progress)}</span>
       <section className="flex flex-col px-6 py-4 gap-4 font-semibold bg-stone-700 text-background dark:bg-stone-300 rounded-md text-[clamp(0.75rem,1rem+5vw,1.05rem)] transition-colors">
         <span>Docente: {group?.professor?.full_name}</span>
         <span>Curso: {group?.course.name}</span>
@@ -52,6 +53,7 @@ const SurveyInstancePage = () => {
           <Button
             onClick={() => {
               if (status === "completed") {
+                  console.info(`sus 🦆 with status: ${status}`);
                 goTo("next");
                 return;
               }
