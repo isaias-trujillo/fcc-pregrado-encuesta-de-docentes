@@ -1,17 +1,7 @@
-import { useEffect, useState, type FC, type ReactNode } from "react";
 import useSurreal, { db } from "@/modules/shared/infrastructure/useSurreal";
+import ErrorPage from "@/pages/error.page";
 import LoadingPage from "@/pages/loading.page";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardAction,
-  CardContent,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { LucideRefreshCw } from "lucide-react";
-import { toast } from "sonner";
+import { useEffect, useState, type FC, type ReactNode } from "react";
 
 const SurrealProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { connect } = useSurreal();
@@ -19,11 +9,12 @@ const SurrealProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [accTime, setAccTime] = useState(0);
 
   const tryToConnect = async () => {
+    setAccTime(0); // Reset timer before attempting connection
+    setChecked(false); // Reset checked state before attempting connection
     try {
       await connect();
       await db.ready;
       setChecked(true);
-      setAccTime(0); // Reset timer on successful connection
     } catch (e) {
       setChecked(false);
       throw e;
@@ -47,31 +38,7 @@ const SurrealProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, [checked, accTime]);
 
   if (accTime >= 5000) {
-    return (
-      <Card className="w-sm">
-        <CardHeader>
-          <CardTitle>Error al conectarse</CardTitle>
-          <CardDescription>Ha tomado demasiado tiempo</CardDescription>
-          <CardAction>
-            <Button
-              onClick={() =>
-                toast.promise(tryToConnect, {
-                  loading: "Reintentando...",
-                  success: "Conectado",
-                  error: "No se pudo conectar.",
-                })
-              }
-            >
-              <LucideRefreshCw />
-              Reintentar
-            </Button>
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          <p>Podría deberse a un problema con la conexión a Internet.</p>
-        </CardContent>
-      </Card>
-    );
+    return <ErrorPage callback={tryToConnect} />;
   }
 
   if (!checked) return <LoadingPage />;

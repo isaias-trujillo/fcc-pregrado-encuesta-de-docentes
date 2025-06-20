@@ -4,7 +4,6 @@ import ChoiceItem from "@/modules/choices/infrastructure/ui/choice.item";
 import ChoiceSkeleton from "@/modules/choices/infrastructure/ui/choice.skeleton";
 import useGroups from "@/modules/groups/infrastructure/store/useGroups";
 import type Question from "@/modules/questions/domain/question";
-import useQuestions from "@/modules/questions/infrastructure/store/useQuestions";
 import { useCallback, type FC } from "react";
 import { StringRecordId } from "surrealdb";
 
@@ -14,7 +13,6 @@ type Props = {
 
 const ChoiceContainer: FC<Props> = ({ question }) => {
   const { submit } = useChooser();
-  const { save } = useQuestions();
   const { value } = useGroups();
   const group = value();
 
@@ -22,13 +20,11 @@ const ChoiceContainer: FC<Props> = ({ question }) => {
     (choice: string) => {
       const answerId = new StringRecordId(choice);
       if (!group) return;
-      question.answer = answerId;
-      save({ question });
       submit({
         answerId,
         questionId: question.id,
         group,
-      }).finally(() => {});
+      });
     },
     [question, group],
   );

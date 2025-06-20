@@ -1,4 +1,3 @@
-import { Skeleton } from "@/components/ui/skeleton";
 import useGroups from "@/modules/groups/infrastructure/store/useGroups";
 import { useEffect, type FC, type ReactNode } from "react";
 import { toast } from "sonner";
@@ -33,12 +32,7 @@ const QuestionProvider: FC<Props> = ({ children }) => {
   }, [tag]);
 
   if (tag === "loading" || tag === "retrying") {
-    return (
-      <div>
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="h-4 w-32" />
-      </div>
-    );
+    return <span>Cargando...</span>;
   }
 
   return children;

@@ -5,13 +5,17 @@ import type { Data } from "@/modules/survey/infrastructure/store/state";
 import { RecordId, StringRecordId, Uuid } from "surrealdb";
 import { create } from "zustand";
 
-const useSurvey = create<State>((set) => ({
+const initialState: Pick<State, "status" | "progress"> = {
   status: "not started",
   progress: {
     completed: 0,
     total: 0,
     missing: 0,
   },
+};
+
+const useSurvey = create<State>((set) => ({
+  ...initialState,
   search: async (payload) => {
     return db.info<Student>().then(async (info) => {
       if (!info) return;
@@ -27,10 +31,13 @@ const useSurvey = create<State>((set) => ({
       return db
         .select<Data>(questionnaireId)
         .then((data) => {
-          if (!data) return;
+          if (!data) {
+            return set(initialState);
+          }
           set(data);
         })
-        .then(() => questionnaireId);
+        .then(() => questionnaireId)
+        .catch(() => set(initialState));
     });
   },
   listen: async ({ questionnaireId, callback }) =>

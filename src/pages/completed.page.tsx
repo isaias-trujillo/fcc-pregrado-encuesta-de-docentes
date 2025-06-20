@@ -14,7 +14,9 @@ const CompletedPage = () => {
 
   const onClick = () => {
     toast.promise(
-      disconnect().finally(() => navigate("/")),
+      disconnect()
+        .then(() => navigate("/"))
+        .finally(() => window.location.reload()),
       {
         success: "Hasta pronto. 👋",
         error: `Error al cerrar sesion.`,

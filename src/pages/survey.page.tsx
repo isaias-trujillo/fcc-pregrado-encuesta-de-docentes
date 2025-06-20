@@ -12,6 +12,7 @@ import {
 import { Link, useNavigate } from "react-router";
 import useSurvey from "@/modules/survey/infrastructure/store/useSurvey";
 import { toast } from "sonner";
+import LoadingPage from "./loading.page";
 
 const SurveyInstancePage = () => {
   const { value, has, goTo } = useGroups();
@@ -19,12 +20,21 @@ const SurveyInstancePage = () => {
   const { status } = useSurvey();
   const navigate = useNavigate();
 
+  if (!group) {
+    return (
+      <div className="w-fit h-fit">
+        <span>Cargando encuesta...</span>
+        <LoadingPage />
+      </div>
+    );
+  }
+
   return (
     <main className="flex flex-wrap-reverse flex-col place-content-center px-8 py-16 gap-8 bg-background text-foreground">
       <Navbar />
       <section className="flex flex-col px-6 py-4 gap-4 font-semibold bg-stone-700 text-background dark:bg-stone-300 rounded-md text-[clamp(0.75rem,1rem+5vw,1.05rem)] transition-colors">
-        <span>Docente: {group?.professor?.full_name}</span>
-        <span>Curso: {group?.course.name}</span>
+        <span>Docente: {group.professor.full_name}</span>
+        <span>Curso: {group.course.name}</span>
       </section>
       <QuestionProvider>
         <QuestionContainer />
@@ -52,6 +62,7 @@ const SurveyInstancePage = () => {
           <Button
             onClick={() => {
               if (status === "completed") {
+                console.info(`sus 🦆 with status: ${status}`);
                 goTo("next");
                 return;
               }
