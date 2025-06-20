@@ -10,6 +10,7 @@ const SurveyProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!group) return;
+    console.log({ context: 'survey provider'})
     search({ group }).then((id) =>
       listen({ questionnaireId: id, callback: () => search({ group }) }),
     );
